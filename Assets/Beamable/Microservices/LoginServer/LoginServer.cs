@@ -25,11 +25,10 @@ namespace Beamable.Microservices
             string verifier = pkce[0];
             string challenge = pkce[1];
 
-            // State is used to track users on callback, just use a random string for now, but ideally, this would be a user ID or unique user reference
+            
             string state = Guid.NewGuid().ToString();
             var oauthData = new OauthData();
-            // Save to config beamable as OS may close the app during redirect, so the app could be reopened with the deep link URI data hence we need to be able to get the last verifier and/or state
-            // Save to config beamable as OS may close the app during redirect, so the app could be reopened with the deep link URI data hence we need to be able to get the last verifier and/or state
+            
             bool isVerifierSet = await SetStats("verifier", verifier);
             bool isStateSet = await SetStats("state", state);
 
@@ -159,8 +158,7 @@ private async Task<string> GetplayerStats(long userid)
     }
     catch (Exception ex)
     {
-        // Handle exceptions if necessary
-        // For example, log the error or return a default value
+        
         BeamableLogger.LogError("Error retrieving player's country code: " + ex.Message);
         return null;
     }
@@ -173,9 +171,9 @@ public async Task<string> CheckTokenStatus(long userId ,  bool isTesting  )
     Dictionary<string, string> tokenDetails = await Services.Stats.GetStats("client", "private", "player", userId, tokenFields);
 
     BeamableLogger.Log("Token details fetched: " + JsonConvert.SerializeObject(tokenDetails));
-    // Initialize the response object
+   
     LoginResult result = new LoginResult();
-    // Check if all required token details are available
+    
     if (tokenDetails.Count < tokenFields.Length)
     {
         return JsonConvert.SerializeObject(new
@@ -240,10 +238,6 @@ public async Task<string> CheckTokenStatus(long userId ,  bool isTesting  )
             return JsonConvert.SerializeObject(new { IsLoggedIn = false, ErrorMessage = "Failed to fetch user data with the refreshed access token." });
         }
 
-      /*  result.NeedsRefresh = true;
-        result.RefreshToken = tokens.RefreshToken;
-        result.RefreshTokenExpiresIn = (int)(tokens.RefreshTokenExpiry - currentUnixTimeSeconds);
-        result.ErrorMessage = "The access token is expired but the refresh token is still valid";*/
     }
     else
     {
@@ -260,7 +254,7 @@ private async Task<LoginResult> RefreshAccessToken(string refreshToken)
 {
     var config = await Services.RealmConfig.GetRealmConfigSettings();
     var clientId = config.GetSetting("accounts", "clientId", "");
-    var clientSecret = config.GetSetting("accounts", "clientSecret", "");  // Ensure this is securely handled
+    var clientSecret = config.GetSetting("accounts", "clientSecret", "");  
     var redirectUri = config.GetSetting("accounts", "redirectUrl", "");
 
     using (var client = new HttpClient())
@@ -270,7 +264,7 @@ private async Task<LoginResult> RefreshAccessToken(string refreshToken)
             {"grant_type", "refresh_token"},
             {"refresh_token", refreshToken},
             {"client_id", clientId},
-            {"client_secret", clientSecret},  // This should be securely stored and used
+            {"client_secret", clientSecret},  
             {"redirect_uri", redirectUri}
         };
 
@@ -308,7 +302,7 @@ private async Task<(bool isSuccess, string AccessToken, string RefreshToken, int
         {
             code = code,
             client_id = clientId,
-            client_secret = clientSecret, // THIS SHOULD BE ON THE SERVER!
+            client_secret = clientSecret, 
             code_verifier = verifier,
             grant_type = "authorization_code",
             redirect_uri = redirectUrl
@@ -345,7 +339,7 @@ private async Task<(bool isSuccess, string AccessToken, string RefreshToken, int
             using (HttpClient client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
-                // Optional: Add additional headers if needed
+            
                 client.DefaultRequestHeaders.Add("apikey", apikey);
                
                 var response = await client.GetAsync("https://api.zebedee.io/v1/oauth2/user");
@@ -464,14 +458,14 @@ private async Task<(bool isSuccess, string AccessToken, string RefreshToken, int
                 {"RefreshTokenExpiry", refreshTokenExpiry.ToString()}
             };
             await Services.Stats.SetStats(access, tokenDetails);
-            return true; // Assume success if no exceptions are thrown
+            return true; 
             
             }
             catch (Exception ex)
             {
-                // Log the exception or handle it as needed
+           
                 BeamableLogger.LogError("Failed to save token details: " + ex.Message);
-                return false; // Return false indicating that saving the token details failed
+                return false; 
             }
         }
         

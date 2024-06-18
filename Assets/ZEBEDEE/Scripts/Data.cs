@@ -29,13 +29,13 @@
         public class LoginResult
         {
             public string ErrorMessage { get; set; }
-            public bool IsLoggedIn { get; set; }  // Indicates if the user is logged in
-            public bool NeedsRefresh { get; set; }  // Indicates if the tokens need to be refreshed
+            public bool IsLoggedIn { get; set; }  
+            public bool NeedsRefresh { get; set; }  
             public string AccessToken { get; set; }
             public string RefreshToken { get; set; }
-            public int ExpiresIn { get; set; }  // Time in seconds until the access token expires
-            public int RefreshTokenExpiresIn { get; set; }  // Time in seconds until the refresh token expires
-            public UserDataResponse UserData { get; set; }  // User data if available
+            public int ExpiresIn { get; set; }  
+            public int RefreshTokenExpiresIn { get; set; }  
+            public UserDataResponse UserData { get; set; }  
         }
 
         public class UserDataResponse

@@ -99,7 +99,7 @@ public class OauthLogin : MonoBehaviour
             {
                 Debug.Log("Check Status Error : " + result.ErrorMessage);
                 responseText.text = result.ErrorMessage;
-              //  ShowLoginButton(); // Show the login button if there is an error
+                 ShowLoginButton();
                 return;
             }
 
@@ -110,7 +110,7 @@ public class OauthLogin : MonoBehaviour
                     Debug.Log("Check Status showing data : " + result.UserData.Data.LightningAddress + " user data " + result.UserData.Data.Gamertag);
                     Debug.Log("Refresh token : " + result.RefreshToken + " Access token : " + result.AccessToken);
                     DisplayUserData(result);
-                    ShowLogoutButton(); // Show the logout button if logged in
+                    ShowLogoutButton(); 
                 }
                 else
                 {
@@ -289,7 +289,7 @@ public class OauthLogin : MonoBehaviour
             {
                 responseText.text = result.Message;
                 Debug.Log("Logout successful.");
-                ShowLoginButton(); // Show the login button after logging out
+                ShowLoginButton(); 
             }
             else
             {
